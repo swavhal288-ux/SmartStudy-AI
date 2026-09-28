@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartStudy AI</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="authScreen" class="auth-screen">
+  <div class="auth-brand">
+    <div class="brand-mark">✦</div>
+    <div><strong>SmartStudy AI</strong><span>AI-POWERED STUDENT WORKSPACE</span></div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth="login">Sign In</button>
+      <button class="auth-tab" data-auth="register">Register</button>
+    </div>
+    <div id="loginForm" class="auth-form">
+      <p class="eyebrow">WELCOME BACK</p>
+      <h1>Sign in to your workspace</h1>
+      <p class="muted">Continue your personalized study journey.</p>
+      <label>Email</label><input id="loginEmail" type="email" placeholder="you@example.com">
+      <label>Password</label><input id="loginPassword" type="password" placeholder="Enter password">
+      <button id="loginBtn" class="primary full">Sign In</button>
+      <p id="loginMsg" class="form-msg"></p>
+      <p class="switch-text">New here? <button data-switch="register">Create an account</button></p>
+    </div>
+    <div id="registerForm" class="auth-form hidden">
+      <p class="eyebrow">GET STARTED</p>
+      <h1>Create your account</h1>
+      <p class="muted">Set up your SmartStudy workspace in seconds.</p>
+      <label>Full name</label><input id="regName" type="text" placeholder="Your name">
+      <label>Email</label><input id="regEmail" type="email" placeholder="you@example.com">
+      <label>Password</label><input id="regPassword" type="password" placeholder="Minimum 6 characters">
+      <label>Confirm password</label><input id="regConfirm" type="password" placeholder="Re-enter password">
+      <button id="registerBtn" class="primary full">Create Account</button>
+      <p id="registerMsg" class="form-msg"></p>
+      <p class="switch-text">Already have an account? <button data-switch="login">Sign in</button></p>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">✦</div><div><strong>SmartStudy AI</strong><span>WORKSPACE</span></div>
+  </div>
+  <div class="profile-box"><div class="avatar" id="avatar">S</div><div><strong id="profileName">Student</strong><small>Student Workspace</small></div></div>
+  <nav>
+    <p class="nav-label">WORKSPACE</p>
+    <button class="nav-item active" data-page="dashboard">⌂ <span>Dashboard</span></button>
+    <button class="nav-item" data-page="subjects">▣ <span>My Subjects</span><b id="subjectBadge">0</b></button>
+    <button class="nav-item" data-page="schedule">✦ <span>AI Schedule</span></button>
+    <button class="nav-item" data-page="assistant">✧ <span>AI Assistant</span></button>
+    <p class="nav-label">STUDY TOOLS</p>
+    <button class="nav-item" data-page="quiz">✓ <span>Quiz Generator</span></button>
+    <button class="nav-item" data-page="materials">▤ <span>Materials Vault</span></button>
+    <button class="nav-item" data-page="focus">◷ <span>Focus Mode</span></button>
+    <button class="nav-item" data-page="progress">↗ <span>Progress</span></button>
+    <button class="nav-item" data-page="replan">⟳ <span>AI Re-planning</span></button>
+    <button class="nav-item" data-page="settings">⚙ <span>Settings</span></button>
+  </nav>
+  <button id="logoutBtn" class="logout">↪ Sign Out</button>
+</aside>
+
+<main class="main">
+<header class="topbar"><div><span class="eyebrow">STUDENT WORKSPACE</span><strong id="topName">Student</strong></div><div class="status"><i></i> Workspace active</div></header>
+
+<section id="dashboard" class="page active">
+  <div class="hero"><div><span class="pill">🔥 <span id="streakText">0 Day</span> Study Streak</span><h1>Welcome back, <span id="helloName">Student</span> 👋</h1><p>You have <b id="dashTopics">0</b> active topics. Keep the focus momentum today.</p></div><button class="primary" data-page-jump="schedule">View Study Schedule →</button></div>
+  <div class="stats">
+    <div class="stat"><span>Active Subjects</span><strong id="dashSubjects">0</strong><small>Subjects in workspace</small></div>
+    <div class="stat"><span>Completion Rate</span><strong id="dashCompletion">0%</strong><small id="dashCompletedText">0 topics completed</small></div>
+    <div class="stat"><span>Focus Hours</span><strong id="dashHours">0.0 hrs</strong><small>Logged in this workspace</small></div>
+    <div class="stat"><span>Active Streak</span><strong id="dashStreak">0 Days</strong><small>Keep studying consistently</small></div>
+  </div>
+  <div class="two-col">
+    <div class="panel"><div class="panel-head"><div><h2>Today's Study Plan</h2><p>Your priority tasks for today</p></div><button class="ghost" data-page-jump="schedule">Open planner →</button></div><div id="todayPlan" class="plan-list"><div class="empty">Generate your study schedule to see tasks here.</div></div></div>
+    <div class="panel"><div class="panel-head"><div><h2>Subject Masteries</h2><p>Your current progress</p></div><button class="ghost" data-page-jump="subjects">Manage all →</button></div><div id="masteries"></div></div>
+  </div>
+</section>
+
+<section id="subjects" class="page">
+  <div class="page-head"><div><span class="eyebrow">WORKSPACE</span><h1>My Subjects</h1><p>Add your subjects, topics, difficulty and exam dates.</p></div><button class="primary" id="addSubjectBtn">+ Add Subject</button></div>
+  <div id="subjectCards" class="subject-grid"></div>
+</section>
+
+<section id="schedule" class="page">
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">PERSONALIZED PLANNING</span>
+      <h1>AI Study Schedule</h1>
+      <p>Create a practical daily plan based on your subjects, difficulty, priority and exam deadlines.</p>
+    </div>
+  </div>
+
+  <div class="schedule-grid">
+    <div class="panel form-panel">
+      <h2>Planning Inputs</h2>
+      <p class="muted">The planner uses your saved subjects and unfinished topics.</p>
+
+      <label>Target exam date</label>
+      <input id="examDate" type="date">
+
+      <label>Available study hours / day</label>
+      <input id="studyHours" type="number" min="1" max="12" step="0.5" value="4">
+
+      <label>Preferred study time</label>
+      <select id="preferredTime">
+        <option>Morning</option>
+        <option>Afternoon</option>
+        <option>Evening</option>
+        <option>Flexible</option>
+      </select>
+
+      <label>Session duration (minutes)</label>
+      <input id="sessionDuration" type="number" min="15" max="180" step="5" value="45">
+
+      <label>Break duration (minutes)</label>
+      <input id="breakDuration" type="number" min="0" max="60" step="5" value="10">
+
+      <button class="primary full" id="generateScheduleBtn">Generate Study Schedule</button>
+      <p id="scheduleInputMsg" class="form-msg"></p>
+
+      <div class="planning-note">
+        <strong>How personalization works</strong>
+        <span>Harder and higher-priority subjects are considered first, while topics already marked complete are skipped.</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Generated Plan</h2>
+          <p id="scheduleMeta">Add subjects first for a personalized plan.</p>
+        </div>
+      </div>
+      <div id="scheduleInsights" class="schedule-insights hidden"></div>
+      <div id="scheduleOutput" class="schedule-output">
+        <div class="empty">Your personalized schedule will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="assistant" class="page">
+  <div class="page-head"><div><span class="eyebrow">STUDY SUPPORT</span><h1>AI Assistant</h1><p>Ask study questions, explain concepts, or get a practical study strategy.</p></div></div>
+  <div class="assistant-card">
+    <div class="assistant-toolbar"><div><span id="assistantStatusDot" class="status-dot"></span><span id="assistantStatus">AI Assistant</span></div><button type="button" id="clearAssistant" class="ghost-btn">New chat</button></div>
+    <div id="chatMessages" class="chat-messages"><div class="chat ai"><b>SmartStudy AI</b><p>Hi! I’m your AI study assistant. Ask me anything about your studies, concepts, revision, exams, or study planning.</p></div></div>
+    <div class="quick"><button type="button" data-prompt="Explain searching algorithms and their types">Explain searching algorithms</button><button type="button" data-prompt="Explain OSI model layer by layer">Explain OSI model</button><button type="button" data-prompt="Explain 8085 architecture">Explain 8085</button><button type="button" data-prompt="Give me a revision strategy">Revision strategy</button><button type="button" data-prompt="Make a 2 hour study routine">2-hour routine</button></div>
+    <div class="chat-input"><input id="assistantInput" autocomplete="off" placeholder="Message SmartStudy AI..."><button type="button" id="sendAssistant" class="primary">Send</button></div>
+    <div id="assistantHint" class="assistant-hint">AI-generated answers can contain mistakes. Verify important academic facts.</div>
+  </div>
+</section>
+
+<section id="quiz" class="page">
+  <div class="page-head"><div><span class="eyebrow">ACTIVE RECALL</span><h1>Quiz Generator</h1><p>Generate an interactive MCQ quiz from your selected academic topic.</p></div></div>
+  <div class="quiz-layout">
+    <div class="panel form-panel"><h2>Quiz settings</h2>
+      <label>Subject</label><select id="quizSubject"><option value="">Choose a subject</option></select>
+      <label>Topic</label><input id="quizTopic" placeholder="e.g. Searching Algorithms">
+      <label>Number of questions</label><select id="quizCount"><option>5</option><option selected>10</option></select>
+      <label>Difficulty</label><select id="quizDifficulty"><option>Easy</option><option selected>Medium</option><option>Hard</option></select>
+      <button type="button" class="primary full" id="generateQuizBtn">Generate Quiz</button>
+      <p id="quizStatus" class="muted"></p>
+    </div>
+    <div class="panel"><div id="quizArea" class="quiz-area"><div class="empty">Choose a topic and click Generate Quiz.</div></div></div>
+  </div>
+</section>
+
+<section id="materials" class="page">
+  <div class="page-head"><div><span class="eyebrow">RESOURCE LIBRARY</span><h1>Materials Vault</h1><p>Every subject has its own folder so notes, PDFs and other files never get mixed.</p></div></div>
+  <div class="panel upload-panel">
+    <div class="upload-grid">
+      <div><label>Subject folder</label><select id="materialSubject"><option value="">Choose subject</option></select></div>
+      <div><label>Select files</label><input id="materialInput" type="file" multiple></div>
+      <div class="upload-action"><button class="primary" id="addMaterialBtn">Add to Subject Folder</button></div>
+    </div>
+    <p class="muted">Files are grouped by subject in this browser prototype. They remain available after refresh on the same browser.</p>
+  </div>
+  <div id="materialList" class="material-list"></div>
+</section>
+
+<section id="focus" class="page">
+  <div class="page-head"><div><span class="eyebrow">DEEP WORK</span><h1>Focus Mode</h1><p>Run a study session without losing the timer when you move around the workspace.</p></div></div>
+  <div class="focus-wrap"><div class="focus-card"><div class="focus-ring"><span id="focusTimer">00:00</span></div><div class="duration-field"><label for="focusDuration">Session duration (minutes)</label><input id="focusDuration" type="number" min="1" max="600" step="1" placeholder="Enter minutes" inputmode="numeric"><small class="muted">Set the duration according to your requirement.</small></div><select id="focusSubject"><option value="">Select subject</option></select><input id="focusTopic" placeholder="Topic you're studying"><div class="focus-buttons"><button id="startFocus" class="primary">Start Session</button><button id="pauseFocus" class="ghost">Pause</button><button id="resetFocus" class="ghost">Reset</button></div><p id="focusStatus" class="muted">Ready for a focused session. The timer keeps running if you move to another page.</p></div></div>
+</section>
+
+<section id="progress" class="page">
+  <div class="page-head"><div><span class="eyebrow">LEARNING ANALYTICS</span><h1>Progress</h1><p>Track completion and focus sessions.</p></div></div>
+  <div class="stats"><div class="stat"><span>Completed Topics</span><strong id="progCompleted">0</strong></div><div class="stat"><span>Pending Topics</span><strong id="progPending">0</strong></div><div class="stat"><span>Focus Sessions</span><strong id="progSessions">0</strong></div><div class="stat"><span>Overall Progress</span><strong id="progOverall">0%</strong></div></div>
+  <div class="panel"><h2>Subject Progress</h2><div id="progressSubjects"></div></div>
+</section>
+
+<section id="replan" class="page">
+  <div class="page-head"><div><span class="eyebrow">ADAPTIVE PLANNING</span><h1>AI Re-planning</h1><p>Update your plan when you miss a session or your available time changes.</p></div></div>
+  <div class="replan-box"><div><h2>Need to adjust today's plan?</h2><p>SmartStudy will move unfinished topics forward and rebalance available study time.</p></div><button id="replanBtn" class="primary">Re-plan My Schedule</button></div>
+  <div id="replanOutput" class="panel"><div class="empty">Your adaptive plan will appear here.</div></div>
+</section>
+
+<section id="settings" class="page">
+  <div class="page-head"><div><span class="eyebrow">ACCOUNT</span><h1>Settings</h1><p>Manage your workspace preferences.</p></div></div>
+  <div class="settings-grid">
+    <div class="panel"><h2>Profile</h2><label>Name</label><input id="settingsName"><label>Email</label><input id="settingsEmail" disabled><button id="saveSettings" class="primary">Save Changes</button><p id="settingsMsg" class="form-msg"></p></div>
+    <div class="panel"><h2>Workspace</h2><p class="muted">SmartStudy AI prototype stores demo data in your browser using localStorage.</p><button id="clearData" class="danger">Clear Study Data</button></div>
+  </div>
+</section>
+</main>
+</div>
+
+<div id="subjectModal" class="modal hidden"><div class="modal-box"><button class="modal-close" id="closeModal">×</button><span class="eyebrow">NEW SUBJECT</span><h2>Add a subject</h2><label>Subject name</label><input id="subjectName" placeholder="e.g. Computer Networks"><label>Topics (comma separated)</label><textarea id="subjectTopics" placeholder="OSI Model, TCP/IP, Routing"></textarea><label>Difficulty</label><select id="subjectDifficulty"><option>Easy</option><option selected>Medium</option><option>Hard</option></select>
+      <label>Priority</label><select id="subjectPriority"><option>Low</option><option selected>Medium</option><option>High</option></select>
+      <label>Exam date</label><input id="subjectExam" type="date"><button id="saveSubject" class="primary full">Add Subject</button><p id="subjectMsg" class="form-msg"></p></div></div>
+<script src="script.js"></script>
+</body>
+</html>
