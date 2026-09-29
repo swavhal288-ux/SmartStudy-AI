@@ -3,9 +3,9 @@ const express = require("express");
 const dotenv = require("dotenv");
 const OpenAI = require("openai");
 
-dotenv.config({
-  path: path.join(__dirname, "..", ".env")
-});
+// Load .env locally.
+// On Render, OPENAI_API_KEY comes from Environment Variables.
+dotenv.config();
 
 console.log(
   "API KEY LOADED:",
@@ -19,7 +19,8 @@ const PORT = Number(process.env.PORT || 3000);
 const MODEL =
   process.env.OPENAI_MODEL || "gpt-5.6-luna";
 
-const publicDir = path.join(__dirname, "..");
+// server.js and index.html are in the SAME folder
+const publicDir = __dirname;
 
 app.use(
   express.json({
@@ -102,7 +103,7 @@ app.post("/api/chat", async (req, res) => {
     if (!process.env.OPENAI_API_KEY) {
       return res.status(503).json({
         error:
-          "OpenAI API key is not configured. Add OPENAI_API_KEY to the .env file, then restart the server."
+          "OpenAI API key is not configured."
       });
     }
 
@@ -130,7 +131,6 @@ app.post("/api/chat", async (req, res) => {
 
         model: MODEL,
 
-        // Give the AI enough room for detailed answers
         text: {
           verbosity: "high"
         },
@@ -250,7 +250,6 @@ STUDENT STUDY CONTEXT:
 ${buildStudyContext(req.body?.studyContext)}
 `,
 
-        // Conversation history
         input: messages
       });
 
@@ -285,12 +284,12 @@ ${buildStudyContext(req.body?.studyContext)}
     if (status === 401) {
 
       message =
-        "The API key was rejected. Check OPENAI_API_KEY in .env.";
+        "The API key was rejected. Check OPENAI_API_KEY.";
 
     } else if (status === 429) {
 
       message =
-        "The API request was rate-limited or your API account has no available usage. Check your OpenAI API usage or billing.";
+        "The API request was rate-limited or your OpenAI API account has no available usage.";
 
     } else if (
       status >= 400 &&
@@ -328,13 +327,15 @@ app.use((req, res) => {
 // Start server
 // --------------------------------------------------
 
+// IMPORTANT FOR RENDER:
+// Listen on 0.0.0.0 and Render's PORT.
 const server = app.listen(
   PORT,
-  "127.0.0.1",
+  "0.0.0.0",
   () => {
 
     console.log(
-      `SmartStudy AI running at http://127.0.0.1:${PORT}`
+      `SmartStudy AI running on port ${PORT}`
     );
 
     console.log(
