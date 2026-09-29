@@ -105,7 +105,7 @@ function logout(){
 
   switchAuth("login");
 }
-
+$("logoutBtn").addEventListener("click", logout);
 function addSubject(){
   const name=$("subjectName").value.trim();
   const topics=$("subjectTopics").value.split(",").map(x=>x.trim()).filter(Boolean);
